@@ -12,9 +12,16 @@
 
 <%
 // User user = (User) session.getAttribute("user");
-User user = (User) request.getAttribute("user");
+//User user = (User) request.getAttribute("user");
 %>
+
+<jsp:useBean id="user" class="org.koushik.javabrains.dto.User" scope="request">
+<jsp:setProperty property="userName" name="user" value="newUser" />
+</jsp:useBean>
+
 Hello <%=user.getUserName() %>!
+
+hello <jsp:getProperty property="userName" name="user"/>
 
 </body>
 </html>
