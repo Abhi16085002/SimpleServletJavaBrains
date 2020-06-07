@@ -1,12 +1,15 @@
 package org.koushik.javabrains;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.koushik.javabrains.dto.User;
 import org.koushik.javabrains.service.LoginService;
 
 /**
@@ -24,11 +27,18 @@ public class LoginServlet extends HttpServlet {
 		
 		userId = request.getParameter("userId");
 		password = request.getParameter("password");
-		System.out.println(userId);
 		LoginService loginService = new LoginService();
 		boolean result = loginService.authenticate(userId, password);
 		if(result) {
-			response.sendRedirect("success.jsp");
+			User user = loginService.getUserDetails(userId);
+			
+//			request.getSession().setAttribute("user", user);
+//			response.sendRedirect("success.jsp");
+			
+			request.setAttribute("user", user);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("success.jsp");
+			dispatcher.forward(request, response);
+			
 			return;
 		}
 		else {
